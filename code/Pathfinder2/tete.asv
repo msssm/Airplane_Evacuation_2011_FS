@@ -1,0 +1,26 @@
+
+clear all;
+clc
+
+ped_soc_influence_area=6;
+lamda=0.1;
+B_soc=3;
+A_soc=2;
+pedMat(:,2)=-10:1:10;
+pedMat(:,1)=-10:1:10;
+m=1;
+for i=1:21
+    for j=1:21
+        n_ab=(-[pedMat(j,1) pedMat(i,1)])./norm([pedMat(j,1) pedMat(i,1)]);
+        phi_alpha=atan((1)/(.000000000001));
+
+        phi_alphabeta=-n_ab;
+        te(m,1:2)=A_soc.*exp((1-abs([pedMat(j,1) pedMat(i,1)]))/B_soc.*n_ab).*sign(n_ab);%((lamda+(1-lamda)*(1+cos(phi_alphabeta))/2))*
+
+        x(i,j)=te(m,1);
+        y(i,j)=te(m,2);
+                m=m+1;
+    end
+end
+r=sqrt(x.^2+y.^2);
+quiver (x, y, 'DisplayName', 'x, y'); figure(gcf)
